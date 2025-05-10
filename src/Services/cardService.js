@@ -53,7 +53,20 @@ import {
   updateStartDueDatesOfCard,
 } from "../Redux/Slices/listSlice";
 
-const baseUrl = "https://task-manager-backend-1-jj16.onrender.com/card";
+const getAuthConfig = () => {
+  const authToken = localStorage.getItem("token");
+
+  if (!authToken) {
+    console.warn("No auth token found!");
+  }
+  return {
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  };
+};
+
+const baseUrl = "https://project-manager-backend-afgb.onrender.com/card";
 let submitCall = Promise.resolve();
 
 export const getCard = async (cardId, listId, boardId, dispatch) => {
@@ -62,7 +75,10 @@ export const getCard = async (cardId, listId, boardId, dispatch) => {
     let response = "";
     submitCall = submitCall.then(() =>
       axios
-        .get(baseUrl + "/" + boardId + "/" + listId + "/" + cardId)
+        .get(
+          baseUrl + "/" + boardId + "/" + listId + "/" + cardId,
+          getAuthConfig() // Correctly pass the config here
+        )
         .then((res) => {
           response = res;
         })
@@ -91,9 +107,11 @@ export const titleUpdate = async (cardId, listId, boardId, title, dispatch) => {
     dispatch(updateTitle(title));
 
     submitCall = submitCall.then(() =>
-      axios.put(baseUrl + "/" + boardId + "/" + listId + "/" + cardId, {
-        title: title,
-      })
+      axios.put(
+        baseUrl + "/" + boardId + "/" + listId + "/" + cardId,
+        { title: title },
+        getAuthConfig() // Correctly pass the config here
+      )
     );
     await submitCall;
   } catch (error) {
@@ -119,10 +137,12 @@ export const descriptionUpdate = async (
     dispatch(updateDescription(description));
     dispatch(updateDescriptionOfCard({ listId, cardId, description }));
 
-    submitCall = submitCall.then(() =>
-      axios.put(baseUrl + "/" + boardId + "/" + listId + "/" + cardId, {
-        description: description,
-      })
+    submitCall = submitCall.then(
+      () =>
+        axios.put(baseUrl + "/" + boardId + "/" + listId + "/" + cardId, {
+          description: description,
+        }),
+      getAuthConfig()
     );
     await submitCall;
   } catch (error) {
@@ -162,7 +182,8 @@ export const comment = async (
             "/add-comment",
           {
             text: text,
-          }
+          },
+          getAuthConfig()
         )
         .then((res) => {
           response = res;
@@ -201,7 +222,8 @@ export const commentUpdate = async (
         baseUrl + "/" + boardId + "/" + listId + "/" + cardId + "/" + commentId,
         {
           text: text,
-        }
+        },
+        getAuthConfig()
       )
     );
     await submitCall;
@@ -229,7 +251,8 @@ export const commentDelete = async (
 
     submitCall = submitCall.then(() =>
       axios.delete(
-        baseUrl + "/" + boardId + "/" + listId + "/" + cardId + "/" + commentId
+        baseUrl + "/" + boardId + "/" + listId + "/" + cardId + "/" + commentId,
+        getAuthConfig()
       )
     );
     await submitCall;
@@ -265,7 +288,8 @@ export const memberAdd = async (
         baseUrl + "/" + boardId + "/" + listId + "/" + cardId + "/add-member",
         {
           memberId: memberId,
-        }
+        },
+        getAuthConfig()
       )
     );
     await submitCall;
@@ -304,7 +328,8 @@ export const memberDelete = async (
           cardId +
           "/" +
           memberId +
-          "/delete-member"
+          "/delete-member",
+        getAuthConfig()
       )
     );
     await submitCall;
@@ -350,7 +375,8 @@ export const labelCreate = async (
             text,
             color,
             backColor,
-          }
+          },
+          getAuthConfig()
         )
         .then((res) => {
           response = res;
@@ -422,7 +448,8 @@ export const labelUpdate = async (
           "/" +
           labelId +
           "/update-label",
-        label
+        label,
+        getAuthConfig()
       )
     );
     await submitCall;
@@ -460,7 +487,8 @@ export const labelDelete = async (
           cardId +
           "/" +
           labelId +
-          "/delete-label"
+          "/delete-label",
+        getAuthConfig()
       )
     );
     await submitCall;
@@ -500,7 +528,8 @@ export const labelUpdateSelection = async (
           "/" +
           labelId +
           "/update-label-selection",
-        { selected: selected }
+        { selected: selected },
+        getAuthConfig()
       )
     );
     await submitCall;
@@ -540,7 +569,8 @@ export const checklistCreate = async (
             "/create-checklist",
           {
             title,
-          }
+          },
+          getAuthConfig()
         )
         .then((res) => {
           response = res;
@@ -590,7 +620,8 @@ export const checklistDelete = async (
           cardId +
           "/" +
           checklistId +
-          "/delete-checklist"
+          "/delete-checklist",
+        getAuthConfig()
       )
     );
     await submitCall;
@@ -639,7 +670,8 @@ export const checklistItemAdd = async (
             "/add-checklist-item",
           {
             text,
-          }
+          },
+          getAuthConfig()
         )
         .then((res) => {
           response = res;
@@ -717,7 +749,8 @@ export const checklistItemCompletedSet = async (
           "/set-checklist-item-completed",
         {
           completed,
-        }
+        },
+        getAuthConfig()
       )
     );
     await submitCall;
@@ -776,7 +809,8 @@ export const checklistItemTextSet = async (
           "/set-checklist-item-text",
         {
           text,
-        }
+        },
+        getAuthConfig()
       )
     );
     await submitCall;
@@ -829,7 +863,8 @@ export const checklistItemDelete = async (
           checklistId +
           "/" +
           checklistItemId +
-          "/delete-checklist-item"
+          "/delete-checklist-item",
+        getAuthConfig()
       )
     );
     await submitCall;
@@ -867,7 +902,8 @@ export const startDueDatesUpdate = async (
           startDate,
           dueDate,
           dueTime,
-        }
+        },
+        getAuthConfig()
       )
     );
     await submitCall;
@@ -906,7 +942,8 @@ export const dateCompletedUpdate = async (
           "/update-date-completed",
         {
           completed,
-        }
+        },
+        getAuthConfig()
       )
     );
     await submitCall;
@@ -950,7 +987,8 @@ export const attachmentAdd = async (
           {
             link: link,
             name: name,
-          }
+          },
+          getAuthConfig()
         )
         .then((res) => {
           response = res;
@@ -1003,7 +1041,8 @@ export const attachmentDelete = async (
           cardId +
           "/" +
           attachmentId +
-          "/delete-attachment"
+          "/delete-attachment",
+        getAuthConfig()
       )
     );
     await submitCall;
@@ -1045,7 +1084,8 @@ export const attachmentUpdate = async (
           "/" +
           attachmentId +
           "/update-attachment",
-        { link: link, name: name }
+        { link: link, name: name },
+        getAuthConfig()
       )
     );
     await submitCall;
@@ -1079,7 +1119,8 @@ export const coverUpdate = async (
         {
           color: color,
           isSizeOne: isSizeOne,
-        }
+        },
+        getAuthConfig()
       )
     );
     await submitCall;

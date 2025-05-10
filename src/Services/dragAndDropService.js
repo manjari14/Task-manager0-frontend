@@ -5,7 +5,19 @@ import {
 } from "../Redux/Slices/listSlice";
 import { openAlert } from "../Redux/Slices/alertSlice";
 
-const baseUrl = "https://task-manager-backend-1-jj16.onrender.com/list";
+const baseUrl = "https://project-manager-backend-afgb.onrender.com/list";
+const getAuthConfig = () => {
+  const authToken = localStorage.getItem("token");
+
+  if (!authToken) {
+    console.warn("No auth token found!");
+  }
+  return {
+    headers: {
+      Authorization: `Bearer ${authToken}`,
+    },
+  };
+};
 
 //  Create promise to queue requests
 let submitCall = Promise.resolve();
@@ -53,13 +65,17 @@ export const updateCardOrder = async (props, dispatch) => {
   // Server side requests
 
   submitCall = submitCall.then(() =>
-    axios.post(baseUrl + "/change-card-order", {
-      boardId: props.boardId,
-      sourceId: props.sourceId,
-      destinationId: props.destinationId,
-      destinationIndex: props.destinationIndex,
-      cardId: props.cardId,
-    })
+    axios.post(
+      baseUrl + "/change-card-order",
+      {
+        boardId: props.boardId,
+        sourceId: props.sourceId,
+        destinationId: props.destinationId,
+        destinationIndex: props.destinationIndex,
+        cardId: props.cardId,
+      },
+      getAuthConfig()
+    )
   );
   try {
     await submitCall;
@@ -92,12 +108,16 @@ export const updateListOrder = async (props, dispatch) => {
 
   // Server side requests
   submitCall = submitCall.then(() =>
-    axios.post(baseUrl + "/change-list-order", {
-      boardId: props.boardId,
-      sourceIndex: props.sourceIndex,
-      destinationIndex: props.destinationIndex,
-      listId: props.listId,
-    })
+    axios.post(
+      baseUrl + "/change-list-order",
+      {
+        boardId: props.boardId,
+        sourceIndex: props.sourceIndex,
+        destinationIndex: props.destinationIndex,
+        listId: props.listId,
+      },
+      getAuthConfig()
+    )
   );
   try {
     await submitCall;
