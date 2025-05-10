@@ -5,7 +5,7 @@ import {
 } from "../Redux/Slices/listSlice";
 import { openAlert } from "../Redux/Slices/alertSlice";
 
-const baseUrl = "http://localhost:5003/list";
+const baseUrl = "https://task-manager-backend-1-jj16.onrender.com/list";
 
 //  Create promise to queue requests
 let submitCall = Promise.resolve();

@@ -15,8 +15,8 @@ import {
   updateDescription,
 } from "../Redux/Slices/boardSlice";
 
-const listRoute = "http://localhost:5003/list";
-const boardRoute = "http://localhost:5003/board";
+const listRoute = "https://task-manager-backend-1-jj16.onrender.com/list";
+const boardRoute = "https://task-manager-backend-1-jj16.onrender.com/board";
 
 export const getLists = async (boardId, dispatch) => {
   dispatch(setLoading(true));

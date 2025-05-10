@@ -14,7 +14,7 @@ import {
   successFetchingBoard,
   updateTitle,
 } from "../Redux/Slices/boardSlice";
-const baseUrl = "http://localhost:5003/board";
+const baseUrl = "https://task-manager-backend-1-jj16.onrender.com/board";
 
 export const getBoards = async (fromDropDown, dispatch) => {
   if (!fromDropDown) dispatch(startFetchingBoards());

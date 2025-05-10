@@ -6,7 +6,7 @@ import {
   deleteCard,
 } from "../Redux/Slices/listSlice";
 
-const baseUrl = "http://localhost:5003/card";
+const baseUrl = "https://task-manager-backend-1-jj16.onrender.com/card";
 
 export const createCard = async (title, listId, boardId, dispatch) => {
   dispatch(setLoading(true));
